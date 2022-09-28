@@ -14,7 +14,12 @@ class DashBoard extends StatelessWidget {
         body: SafeArea(
           child: IndexedStack(
             index: controller.tabIndex,
-            children: [HomePage(), Contests(), Favorites(), Settings(),],
+            children: [
+              HomePage(),
+              Contests(),
+              Favorites(),
+              Settings(),
+            ],
           ),
         ),
         bottomNavigationBar: Theme(
