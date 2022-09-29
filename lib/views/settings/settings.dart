@@ -181,7 +181,7 @@ class Settings extends GetView<SettingsController> {
                                   right: 18.0,
                                   top: 8),
                               child: Icon(
-                                Icons.call,
+                                Icons.star,
                                 color: Colors.white,
                               ),
                             ),

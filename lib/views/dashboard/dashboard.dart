@@ -6,6 +6,8 @@ import 'package:nba_project/views/favorites/favorites.dart';
 import 'package:nba_project/views/home_page/home_page.dart';
 import 'package:nba_project/views/settings/settings.dart';
 
+import '../contests/dunkers.dart';
+
 class DashBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

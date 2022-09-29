@@ -4,7 +4,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:nba_project/views/contests/contests_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:nba_project/views/contests/contests_detail.dart';
+import 'package:nba_project/views/contests/dunkers.dart';
 import 'dart:convert';
 
 import 'package:nba_project/views/favorites/favorites.dart';
@@ -91,7 +91,9 @@ class _ContestsState extends State<Contests> {
           ),
         ),
         body: (games == null)
-            ? const Center(child: CircularProgressIndicator())
+            ? Container(
+                color: Colors.black,
+                child: const Center(child: CircularProgressIndicator()))
             : Container(
                 color: Colors.black,
                 child: Padding(
@@ -134,7 +136,7 @@ class _ContestsState extends State<Contests> {
                                                   .toString()
                                                   .toUpperCase(),
                                               style: GoogleFonts.openSans(
-                                                  textStyle: TextStyle(
+                                                  textStyle: const TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -143,14 +145,14 @@ class _ContestsState extends State<Contests> {
                                               '${games[index]['home_team']['full_name']} vs. ${games[index]['visitor_team']['full_name']}'
                                                   .toUpperCase(),
                                               style: GoogleFonts.openSans(
-                                                  textStyle: TextStyle(
+                                                  textStyle: const TextStyle(
                                                       color: Color.fromRGBO(
                                                           211, 211, 211, 1),
                                                       fontSize: 15))),
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 36,
                                       width: 36,
                                       child: Icon(
