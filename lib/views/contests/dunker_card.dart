@@ -3,12 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-//AIzaSyBPbXHMIvJR9pAG1diRhysBOmPMna1aEzM
-/*curl \
-  'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&order=viewCount&q=ike%20anigbogu&key=[YOUR_API_KEY]' \
-  --header 'Accept: application/json' \
-  --compressed
-*/
+
 
 Future<Map> getJson() async {
   var url =
