@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:timeago/timeago.dart' as timeago;
 
-
-
-Future<Map> getJson() async {
-  var url =
-      'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&order=viewCount&q=dunk_contests&key=AIzaSyDAf4lTuExHUO8N2FUj5wI0JxTyaQHJZ1o';
-
-  http.Response response =
-      await http.get(Uri.parse(url), headers: ({'Accept': 'application/json'}));
-  return jsonDecode(response.body);
-}
+import 'package:nba_project/views/contests/video_player.dart/models/models.dart';
+import 'package:nba_project/views/contests/video_player.dart/services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DunkerCard extends StatefulWidget {
   final dynamic player;
@@ -24,20 +18,22 @@ class DunkerCard extends StatefulWidget {
 }
 
 class _DunkerCardState extends State<DunkerCard> {
-  var videos;
-
-  void getData() async {
-    final data = await getJson();
-    setState(() {
-      videos = data["items"];
-      print("Got data");
-    });
-  }
+  ServicesImpl serviceImpl = ServicesImpl();
+  List<Items>? videos;
 
   @override
   void initState() {
     super.initState();
-    getData();
+    _getVideoInfo();
+  }
+
+  void _getVideoInfo() async {
+    final data = await serviceImpl.searchVideo(
+        widget.player["first_name"] + " " + widget.player["last_name"]);
+    setState(() {
+      videos = data;
+      print(videos![0].id.toString());
+    });
   }
 
   @override
@@ -218,14 +214,14 @@ class _DunkerCardState extends State<DunkerCard> {
                             height: 16,
                           );
                         },
-                        itemCount: videos.length,
+                        itemCount: 10,
                         itemBuilder: (context, index) {
-                          final videoPreviewUrl = videos[index]['snippet']
-                                  ['thumbnails']['medium']['url']
-                              .toString();
+                          final videoPreviewUrl =
+                              videos![index].snippet!.thumbnails!.medium!.url;
                           return Card(
-                            color: Colors.white,
+                              color: Colors.black,
                               child: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Container(
                                       decoration: BoxDecoration(
@@ -235,15 +231,64 @@ class _DunkerCardState extends State<DunkerCard> {
                                               Color.fromRGBO(211, 211, 211, 1),
                                         ),
                                       ),
-                                      height: 92,
+                                      height: 97,
                                       width: 126,
                                       child: Image.network(
-                                        videoPreviewUrl,
+                                        videoPreviewUrl!,
                                         fit: BoxFit.cover,
                                       )),
-                                  Text("DESCRIPTION",
-                                      style: GoogleFonts.openSans(
-                                          color: Colors.white))
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 16, top: 10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            height: 60,
+                                            child: Text(
+                                                videos![index].snippet!.title!,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 3,
+                                                textAlign: TextAlign.start,
+                                                style: GoogleFonts.openSans(
+                                                    color: Colors.white,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ),
+                                          SizedBox(
+                                            height: 4,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                  timeago.format(DateTime.parse(
+                                                      videos![index]
+                                                          .snippet!
+                                                          .publishedAt
+                                                          .toString())),
+                                                  style: GoogleFonts.openSans(
+                                                      color: Colors.white,
+                                                      fontSize: 12)),
+                                              IconButton(
+                                                  onPressed: () => launchUrl(
+                                                      Uri.parse(
+                                                          'https://www.youtube.com/watch?v=${videos![index].id!.videoId}')),
+                                                  icon: Icon(
+                                                    Icons.arrow_upward,
+                                                    size: 15,
+                                                    color: Colors.white,
+                                                  ))
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ));
                         }),
