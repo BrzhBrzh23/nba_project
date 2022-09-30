@@ -1,16 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:nba_project/views/contests/dunker_card.dart';
+import 'package:nba_project/views/home_page/home_page_controller.dart';
 
-Future<Map> getJson() async {
-  var url = 'https://www.balldontlie.io/api/v1/players/';
-
-  http.Response response = await http.get(Uri.parse(url));
-  return jsonDecode(response.body);
-}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,19 +16,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var players;
-
-  void getData() async {
-    final data = await getJson();
-    setState(() {
-      players = data['data'];
-    });
-  }
+  HomePageController homePageController = Get.put(HomePageController());
 
   @override
   void initState() {
     super.initState();
-    getData();
   }
 
   @override
@@ -78,7 +66,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: (players == null)
+        body: Obx(() => (homePageController.players == null)
             ? Container(
                 color: Colors.black,
                 child: const Center(child: CircularProgressIndicator()))
@@ -92,18 +80,21 @@ class _HomePageState extends State<HomePage> {
                           height: 20,
                         );
                       },
-                      itemCount: players.length,
+                      itemCount: homePageController.players.length,
                       itemBuilder: ((context, index) {
-                        final playerFirstName = players[index]['first_name'];
-                        final playerSecondName = players[index]['last_name'];
+                        final playerFirstName =
+                            homePageController.players[index]['first_name'];
+                        final playerSecondName =
+                            homePageController.players[index]['last_name'];
                         return Container(
                           height: 110,
                           width: 327,
                           child: GestureDetector(
-                            onTap: () =>  Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return DunkerCard(players[index]);
-                          })),
+                            onTap: () => Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return DunkerCard(
+                                  homePageController.players[index]);
+                            })),
                             child: Card(
                               color: Colors.black,
                               shape: RoundedRectangleBorder(
@@ -119,7 +110,8 @@ class _HomePageState extends State<HomePage> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(4),
                                         border: Border.all(
-                                          color: Color.fromRGBO(211, 211, 211, 1),
+                                          color:
+                                              Color.fromRGBO(211, 211, 211, 1),
                                         ),
                                       ),
                                       height: 78,
@@ -130,14 +122,15 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(top: 15, bottom: 9),
+                                    padding:
+                                        EdgeInsets.only(top: 15, bottom: 9),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           child: Text(
-                                            players[index]['first_name']
+                                            homePageController.players[index]['first_name']
                                                 .toString()
                                                 .toUpperCase(),
                                             style: GoogleFonts.openSans(
@@ -149,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Container(
                                           child: Text(
-                                            players[index]['last_name']
+                                            homePageController.players[index]['last_name']
                                                 .toString()
                                                 .toUpperCase(),
                                             style: GoogleFonts.openSans(
@@ -172,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             Container(
                                               child: Text(
-                                                players[index]['team']
+                                                homePageController.players[index]['team']
                                                         ['full_name']
                                                     .toString()
                                                     .toUpperCase(),
@@ -197,6 +190,6 @@ class _HomePageState extends State<HomePage> {
                         );
                       })),
                 ),
-              ));
+              )));
   }
 }

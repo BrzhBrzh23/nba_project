@@ -5,6 +5,7 @@ import 'package:nba_project/routes/app_routes.dart';
 import 'package:nba_project/views/contests/dunkers.dart';
 import 'package:nba_project/views/dashboard/dashboard.dart';
 import 'package:nba_project/views/dashboard/dashboard_controller.dart';
+import 'package:nba_project/views/favorites/favorites_controller.dart';
 import 'package:nba_project/views/home_page/home_page_controller.dart';
 
 void main() {
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.lazyPut<DashBoardController>(() => DashBoardController());
     Get.lazyPut<HomePageController>(() => HomePageController());
+    Get.lazyPut<FavoritesController>(() => FavoritesController(),);
     return GetMaterialApp(
       initialRoute: AppRoutes.DASHBOARD,
       getPages: AppPages.list,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:nba_project/views/favorites/favorites_controller.dart';
 import 'dart:convert';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -18,6 +20,8 @@ class DunkerCard extends StatefulWidget {
 }
 
 class _DunkerCardState extends State<DunkerCard> {
+  FavoritesController favoritesController = Get.put(FavoritesController());
+
   ServicesImpl serviceImpl = ServicesImpl();
   List<Items>? videos;
 
@@ -53,7 +57,21 @@ class _DunkerCardState extends State<DunkerCard> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20.16),
-            child: IconButton(onPressed: () {}, icon: Icon(Icons.star)),
+            child: Obx(() => IconButton(
+                onPressed: () {
+                  setState(() {
+                    favoritesController.addFavItemToList(widget.player);
+                  });
+                },
+                icon: (favoritesController.favList.contains(widget.player))
+                    ? Icon(
+                        Icons.star,
+                        color: Colors.blue,
+                      )
+                    : Icon(
+                        Icons.star,
+                        color: Colors.white,
+                      ))),
           )
         ],
       ),

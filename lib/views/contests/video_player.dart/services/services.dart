@@ -38,6 +38,8 @@ curl \
 //   }
 // }
 
+//
+
 abstract class Services {
   Future<List<Items>> searchVideo(String query);
 }
@@ -56,7 +58,7 @@ class ServicesImpl implements Services {
 
   Future<List<Items>> _getVideoInfoFromUrl(String url) async {
     print(url);
-    final response = await client!.get(Uri.parse(url),
+    final response = await client.get(Uri.parse(url),
         headers: ({'Accept': 'application/json'}));
     /*The HTTP headers are used to pass additional information between the clients
         and the server through the request and response header. */
